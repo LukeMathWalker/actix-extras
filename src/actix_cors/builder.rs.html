@@ -647,7 +647,6 @@
 <span id="640">640</span>
 <span id="641">641</span>
 <span id="642">642</span>
-<span id="643">643</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashSet</span>, <span class="ident">convert::TryInto</span>, <span class="ident">iter::FromIterator</span>, <span class="ident">rc::Rc</span>};
 
 <span class="kw">use</span> <span class="ident">actix_utils::future</span>::{<span class="self">self</span>, <span class="ident">Ready</span>};
@@ -1140,7 +1139,6 @@
     <span class="ident">S::Future</span>: <span class="lifetime">&#39;static</span>,
 
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-    <span class="ident">B::Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
 {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ServiceResponse</span><span class="op">&lt;</span><span class="ident">EitherBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
@@ -1247,7 +1245,7 @@
             .<span class="ident">is_err</span>());
     }
 
-    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="attribute">#[<span class="ident">actix_web::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">restrictive_defaults</span>() {
         <span class="kw">let</span> <span class="ident">cors</span> <span class="op">=</span> <span class="ident">Cors::default</span>()
             .<span class="ident">new_transform</span>(<span class="ident">test::ok_service</span>())
@@ -1262,12 +1260,12 @@
         <span class="macro">assert_eq!</span>(<span class="ident">resp</span>.<span class="ident">status</span>(), <span class="ident">StatusCode::BAD_REQUEST</span>);
     }
 
-    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="attribute">#[<span class="ident">actix_web::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">allowed_header_try_from</span>() {
         <span class="kw">let</span> <span class="ident">_cors</span> <span class="op">=</span> <span class="ident">Cors::default</span>().<span class="ident">allowed_header</span>(<span class="string">&quot;Content-Type&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="attribute">#[<span class="ident">actix_web::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">allowed_header_try_into</span>() {
         <span class="kw">struct</span> <span class="ident">ContentType</span>;
 
@@ -1282,7 +1280,7 @@
         <span class="kw">let</span> <span class="ident">_cors</span> <span class="op">=</span> <span class="ident">Cors::default</span>().<span class="ident">allowed_header</span>(<span class="ident">ContentType</span>);
     }
 
-    <span class="attribute">#[<span class="ident">actix_rt::test</span>]</span>
+    <span class="attribute">#[<span class="ident">actix_web::test</span>]</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">middleware_generic_over_body_type</span>() {
         <span class="kw">let</span> <span class="ident">srv</span> <span class="op">=</span> <span class="ident">fn_service</span>(<span class="op">|</span><span class="ident">req</span>: <span class="ident">ServiceRequest</span><span class="op">|</span> <span class="kw">async</span> <span class="kw">move</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">req</span>.<span class="ident">into_response</span>(<span class="ident">HttpResponse::with_body</span>(<span class="ident">StatusCode::OK</span>, <span class="ident">body::None::new</span>())))
@@ -1292,5 +1290,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_cors" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (6abb6385b 2022-01-26)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_cors" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (5d8767cb2 2022-02-12)" ></div>
 </body></html>
