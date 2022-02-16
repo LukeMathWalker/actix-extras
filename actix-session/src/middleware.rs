@@ -584,6 +584,7 @@ fn delete_session_cookie(
     config: &CookieConfiguration,
 ) -> Result<(), anyhow::Error> {
     let removal_cookie = Cookie::build(config.name.clone(), "")
+        .path(config.path.clone())
         .max_age(time::Duration::seconds(0))
         .finish();
     let val = HeaderValue::from_str(&removal_cookie.to_string())
