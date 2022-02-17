@@ -22,10 +22,10 @@ async fn cookie_storage() -> std::io::Result<()> {
 	let app = test::init_service(
 	        App::new()
 	            .wrap(
-	                SessionMiddleware::new(
+	                SessionMiddleware::builder(
 	                    CookieSessionStore::default(),
 	                    signing_key.clone(),
-	                )
+	                ).cookie_path("/test".to_string()).cookie_domain(Some("localhost".to_string())).build()
 	            )
 	            .route("/login", web::post().to(login))
 	            .route("/logout", web::post().to(logout))
@@ -35,16 +35,18 @@ async fn cookie_storage() -> std::io::Result<()> {
     let login_response = test::call_service(&app, login_request).await;
     let session_cookie = login_response.response().cookies().next().unwrap();
     assert_eq!(session_cookie.name(), "id");
-    assert_eq!(session_cookie.path(), Some("/"));
+    assert_eq!(session_cookie.path(), Some("/test"));
     assert_eq!(session_cookie.secure(), Some(true));
     assert_eq!(session_cookie.max_age(), None);
+    assert_eq!(session_cookie.domain(), None);
 
     let logout_request = test::TestRequest::post().cookie(session_cookie).uri("/logout").to_request();
     let logout_response = test::call_service(&app, logout_request).await;
     let deletion_cookie = logout_response.response().cookies().next().unwrap();
     assert_eq!(deletion_cookie.name(), "id");
-    assert_eq!(deletion_cookie.path(), Some("/"));
+    assert_eq!(deletion_cookie.path(), Some("/test"));
     assert_eq!(deletion_cookie.secure(), None);
     assert_eq!(deletion_cookie.max_age(), Some(Duration::seconds(0)));
+    assert_eq!(deletion_cookie.domain(), None);
     Ok(())
 }
