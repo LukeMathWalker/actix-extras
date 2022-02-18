@@ -588,6 +588,7 @@ fn delete_session_cookie(
 ) -> Result<(), anyhow::Error> {
     let removal_cookie = Cookie::build(config.name.clone(), "")
         .path(config.path.clone())
+        .http_only(config.http_only)
         .max_age(time::Duration::seconds(0));
     let removal_cookie = if let Some(domain) = config.domain.clone() {
         removal_cookie.domain(domain).finish()

@@ -36,6 +36,7 @@ async fn cookie_storage() -> std::io::Result<()> {
     assert_eq!(session_cookie.name(), "id");
     assert_eq!(session_cookie.path().unwrap(), "/test");
     assert_eq!(session_cookie.secure().unwrap(), true);
+    assert_eq!(session_cookie.http_only().unwrap(), true);
     assert!(session_cookie.max_age().is_none());
     assert_eq!(session_cookie.domain().unwrap(), "localhost");
 
@@ -48,6 +49,7 @@ async fn cookie_storage() -> std::io::Result<()> {
     assert_eq!(deletion_cookie.name(), "id");
     assert_eq!(deletion_cookie.path().unwrap(), "/test");
     assert!(deletion_cookie.secure().is_none());
+    assert_eq!(deletion_cookie.http_only().unwrap(), true);
     assert_eq!(deletion_cookie.max_age().unwrap(), Duration::ZERO);
     assert_eq!(deletion_cookie.domain().unwrap(), "localhost");
     Ok(())
