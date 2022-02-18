@@ -564,6 +564,9 @@ fn set_session_cookie(
     }
     cookie.set_same_site(config.same_site);
     cookie.set_path(config.path.clone());
+    if let Some(domain) = config.domain.clone() {
+        cookie.set_domain(domain);
+    }
 
     let mut jar = CookieJar::new();
     match config.content_security {
@@ -585,8 +588,13 @@ fn delete_session_cookie(
 ) -> Result<(), anyhow::Error> {
     let removal_cookie = Cookie::build(config.name.clone(), "")
         .path(config.path.clone())
-        .max_age(time::Duration::seconds(0))
-        .finish();
+        .max_age(time::Duration::seconds(0));
+    let removal_cookie = if let Some(domain) = config.domain.clone() {
+        removal_cookie.domain(domain).finish()
+    } else {
+        removal_cookie.finish()
+    };
+    
     let val = HeaderValue::from_str(&removal_cookie.to_string())
         .context("Failed to attach a session removal cookie to the outgoing response")?;
     response.headers_mut().append(SET_COOKIE, val);
